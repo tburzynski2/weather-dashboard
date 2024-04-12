@@ -1,9 +1,11 @@
 let cityInputEl = $("#city-input");
 let submitButton = $("#submit-button");
 const key = "8082a0eacc4e1bbc29b1dd51ac82e102";
+let cityNameInputVal = "";
 
 function getInput() {
-  return cityInputEl.val();
+  cityNameInputVal = cityInputEl.val();
+  return cityNameInputVal;
 }
 
 function getCityLocation(cityName) {
@@ -43,6 +45,16 @@ function getDailyForecast(lat, lon) {
           console.log(data);
           console.log(
             `Temp: ${data.main.temp}°F\nWind: ${data.wind.speed} MPH\nHumidity: ${data.main.humidity}%\nhttp://openweathermap.org/img/w/${data.weather[0].icon}.png`
+          );
+          let currentDate = new Date(data.dt * 1000);
+          currentDate = `${currentDate.getMonth()}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+          $("#city-date").text(`${cityNameInputVal} (${currentDate})`);
+          $("#daily-temp").text(`Temp: ${data.main.temp}`);
+          $("#daily-wind").text(`Wind: ${data.wind.speed}`);
+          $("#daily-humidity").text(`Wind: ${data.main.humidity}`);
+          $("#daily-icon").attr(
+            "src",
+            `http://openweathermap.org/img/w/${data.weather[0].icon}.png`
           );
         });
       } else {
