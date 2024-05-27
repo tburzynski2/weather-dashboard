@@ -8,7 +8,7 @@ function getInput() {
   return cityNameInputVal;
 }
 
-function getCityLocation(cityName) {
+function getCityCoordinates(cityName) {
   let endpoint = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${key}`;
   return fetch(endpoint)
     .then(function (response) {
@@ -20,15 +20,14 @@ function getCityLocation(cityName) {
             lat: lat,
             lon: lon,
           };
-          console.log(result);
+          console.log(
+            `From getCityCoordinates, line 23: \nLat: ${result.lat}, Lon: ${result.lon}`
+          );
           return result;
         });
       } else {
         throw new Error(`Error:${response.statusText}`);
       }
-    })
-    .then(function (location) {
-      return getDailyForecast(location.lat, location.lon);
     })
     .catch(function (error) {
       alert("Unable to connect to OpenWeather API");
@@ -36,15 +35,25 @@ function getCityLocation(cityName) {
     });
 }
 
-function getDailyForecast(lat, lon) {
-  const endpoint = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=imperial`;
-  fetch(endpoint)
+function getDailyForecast(cityName) {
+  getCityCoordinates(cityName)
+    .then(function (coordinates) {
+      const endpoint =
+        "https://api.openweathermap.org/data/2.5/weather?lat=" +
+        coordinates.lat +
+        "&lon=" +
+        coordinates.lon +
+        "&appid=" +
+        key +
+        "&units=imperial";
+      return fetch(endpoint);
+    })
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-          console.log(data);
+          console.log(`From getDailyForecast, line 45: ${data}`);
           console.log(
-            `Temp: ${data.main.temp}°F\nWind: ${data.wind.speed} MPH\nHumidity: ${data.main.humidity}%\nhttp://openweathermap.org/img/w/${data.weather[0].icon}.png`
+            `From getDailyForecast, line 47:\nTemp: ${data.main.temp}°F\nWind: ${data.wind.speed} MPH\nHumidity: ${data.main.humidity}%\nhttp://openweathermap.org/img/w/${data.weather[0].icon}.png`
           );
           let currentDate = new Date(data.dt * 1000);
           currentDate = `${currentDate.getMonth()}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
@@ -61,8 +70,8 @@ function getDailyForecast(lat, lon) {
         alert(`Error:${response.statusText}`);
       }
     })
-    .catch(function (error) {
-      alert("Unable to connect to OpenWeather API");
+    .catch(function (err) {
+      alert(`Unable to connect to OpenWeather API: ${error}`);
     });
 }
 
@@ -72,6 +81,6 @@ $(document).ready(function () {
   submitButton.on("click", function (event) {
     event.preventDefault();
     const cityName = getInput();
-    const geoLocation = getCityLocation(cityName);
+    getDailyForecast(cityName);
   });
 });
