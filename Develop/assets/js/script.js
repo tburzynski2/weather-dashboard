@@ -21,9 +21,9 @@ function getInput() {
 
 function renderSearches(searches) {
   searchDivEl.find("p").remove();
-  for (let i = 0; i < searches.length; i++) {
+  for (let i = searches.length - 1; i >= 0; i--) {
     searchDivEl.append(
-      `<p class="border border-secondary rounded p-2 search-history">${searches.pop()}</p>`
+      `<p class="border border-secondary rounded p-2 search-history">${searches[i]}</p>`
     );
   }
 }
@@ -175,6 +175,7 @@ function getFiveDayForecast(cityName) {
 }
 
 $(document).ready(function () {
+  localStorage.setItem("searches", JSON.stringify([]));
   submitButtonEl.on("click", function (event) {
     event.preventDefault();
     const cityName = getInput();
