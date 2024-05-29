@@ -5,3 +5,7 @@
 .daily-weather {
   height: 250px;
 }
+
+.five-day-result {
+  background-color: aquamarine;
+}

@@ -2,6 +2,7 @@ const cityInputEl = $("#city-input");
 const submitButtonEl = $("#submit-button");
 const searchDivEl = $("#search-div");
 const key = "8082a0eacc4e1bbc29b1dd51ac82e102";
+const fiveDayResultsEl = $("#five-day-results-container");
 let cityNameInputVal = "";
 
 function getInput() {
@@ -68,11 +69,13 @@ function getDailyForecast(cityName) {
       if (response.ok) {
         response.json().then(function (data) {
           let currentDate = new Date(data.dt * 1000);
-          currentDate = `${currentDate.getMonth()}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+          currentDate = `${
+            currentDate.getMonth() + 1
+          }/${currentDate.getDate()}/${currentDate.getFullYear()}`;
           $("#city-date").text(`${cityNameInputVal} (${currentDate})`);
-          $("#daily-temp").text(`Temp: ${data.main.temp}`);
-          $("#daily-wind").text(`Wind: ${data.wind.speed}`);
-          $("#daily-humidity").text(`Wind: ${data.main.humidity}`);
+          $("#daily-temp").text(`Temp: ${data.main.temp}°F`);
+          $("#daily-wind").text(`Wind: ${data.wind.speed}mph`);
+          $("#daily-humidity").text(`Humidity: ${data.main.humidity}%`);
           $("#daily-icon").attr(
             "src",
             `http://openweathermap.org/img/w/${data.weather[0].icon}.png`
@@ -150,17 +153,20 @@ function getFiveDayForecast(cityName) {
       return fiveDayForecastArray;
     })
     .then(function (forecastArray) {
+      fiveDayResultsEl.empty();
       for (let i = 0; i < forecastArray.length; i++) {
         const forecastEl = `
-        <h2>${forecastArray[i].date}</h2>
-        <img src="http://openweathermap.org/img/w/${forecastArray[i].weatherIcon}.png" />
-        <p><strong>High:</strong> ${forecastArray[i].highTemp}°F</p>
-        <p><strong>Low:</strong> ${forecastArray[i].lowTemp}°F</p>
-        <p><strong>Humidity:</strong> ${forecastArray[i].humidity}%</p>
+        <div class="col-md-2 bg-info bg-gradient">
+          <h3>${forecastArray[i].date}</h3>
+          <img src="http://openweathermap.org/img/w/${forecastArray[i].weatherIcon}.png" />
+          <p><strong>High:</strong> ${forecastArray[i].highTemp}°F</p>
+          <p><strong>Low:</strong> ${forecastArray[i].lowTemp}°F</p>
+          <p><strong>Humidity:</strong> ${forecastArray[i].humidity}%</p>
+        </div>        
         `;
 
-        const parentEl = $("#next-date-" + (i + 1));
-        parentEl.append(forecastEl);
+        // const parentEl = $("#next-date-" + (i + 1));
+        fiveDayResultsEl.append(forecastEl);
       }
     })
     .catch(function (err) {
