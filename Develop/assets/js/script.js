@@ -1,16 +1,30 @@
-let cityInputEl = $("#city-input");
-let submitButton = $("#submit-button");
+const cityInputEl = $("#city-input");
+const submitButtonEl = $("#submit-button");
+const searchDivEl = $("#search-div");
 const key = "8082a0eacc4e1bbc29b1dd51ac82e102";
 let cityNameInputVal = "";
 
 function getInput() {
-  const cityNameInputVal = cityInputEl.val();
+  cityNameInputVal = cityInputEl.val();
   const searches = JSON.parse(localStorage.getItem("searches")) || [];
 
   searches.push(cityNameInputVal);
   localStorage.setItem("searches", JSON.stringify(searches));
 
+  if (searches.length > 0) {
+    renderSearches(searches);
+  }
+
   return cityNameInputVal;
+}
+
+function renderSearches(searches) {
+  searchDivEl.find("p").remove();
+  for (let i = 0; i < searches.length; i++) {
+    searchDivEl.append(
+      `<p class="border border-secondary rounded p-2 search-history">${searches.pop()}</p>`
+    );
+  }
 }
 
 function getCityCoordinates(cityName) {
@@ -155,7 +169,7 @@ function getFiveDayForecast(cityName) {
 }
 
 $(document).ready(function () {
-  submitButton.on("click", function (event) {
+  submitButtonEl.on("click", function (event) {
     event.preventDefault();
     const cityName = getInput();
     getDailyForecast(cityName);
