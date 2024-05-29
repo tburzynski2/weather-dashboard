@@ -74,7 +74,7 @@ function getDailyForecast(cityName) {
           }/${currentDate.getDate()}/${currentDate.getFullYear()}`;
           $("#city-date").text(`${cityNameInputVal} (${currentDate})`);
           $("#daily-temp").text(`Temp: ${data.main.temp}°F`);
-          $("#daily-wind").text(`Wind: ${data.wind.speed}mph`);
+          $("#daily-wind").text(`Wind: ${data.wind.speed} MPH`);
           $("#daily-humidity").text(`Humidity: ${data.main.humidity}%`);
           $("#daily-icon").attr(
             "src",
@@ -121,6 +121,7 @@ function getFiveDayForecast(cityName) {
         const weatherIcon = forecastEntry.weather[0].icon;
         const highTemp = forecastEntry.main.temp_max;
         const lowTemp = forecastEntry.main.temp_min;
+        const windSpeed = forecastEntry.wind.speed;
         const humidity = forecastEntry.main.humidity;
 
         // Check if this date already exists in the forecast array
@@ -135,6 +136,7 @@ function getFiveDayForecast(cityName) {
             weatherIcon: weatherIcon,
             highTemp: highTemp,
             lowTemp: lowTemp,
+            windSpeed: windSpeed,
             humidity: humidity,
           };
           fiveDayForecastArray.push(forecastObject);
@@ -161,6 +163,7 @@ function getFiveDayForecast(cityName) {
           <img src="http://openweathermap.org/img/w/${forecastArray[i].weatherIcon}.png" />
           <p><strong>High:</strong> ${forecastArray[i].highTemp}°F</p>
           <p><strong>Low:</strong> ${forecastArray[i].lowTemp}°F</p>
+          <p><strong>Wind:</strong> ${forecastArray[i].windSpeed} MPH</p>
           <p><strong>Humidity:</strong> ${forecastArray[i].humidity}%</p>
         </div>        
         `;
