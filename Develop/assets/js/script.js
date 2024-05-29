@@ -4,7 +4,12 @@ const key = "8082a0eacc4e1bbc29b1dd51ac82e102";
 let cityNameInputVal = "";
 
 function getInput() {
-  cityNameInputVal = cityInputEl.val();
+  const cityNameInputVal = cityInputEl.val();
+  const searches = JSON.parse(localStorage.getItem("searches")) || [];
+
+  searches.push(cityNameInputVal);
+  localStorage.setItem("searches", JSON.stringify(searches));
+
   return cityNameInputVal;
 }
 
