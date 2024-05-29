@@ -90,14 +90,12 @@ function getFiveDayForecast(cityName) {
       }
     })
     .then(function (forecastResults) {
-      // Extract and process forecast data
       const forecastData = forecastResults.list;
       const fiveDayForecastArray = [];
 
-      // Iterate through the forecast data and extract required information
       forecastData.forEach(function (forecastEntry) {
         const dateTime = forecastEntry.dt_txt;
-        const date = dateTime.split(" ")[0]; // Extract date from date-time string
+        const date = dateTime.split(" ")[0];
         const weatherIcon = forecastEntry.weather[0].icon;
         const highTemp = forecastEntry.main.temp_max;
         const lowTemp = forecastEntry.main.temp_min;
@@ -131,6 +129,20 @@ function getFiveDayForecast(cityName) {
 
       console.log("Five-day forecast:", fiveDayForecastArray);
       return fiveDayForecastArray;
+    })
+    .then(function (forecastArray) {
+      for (let i = 0; i < forecastArray.length; i++) {
+        const forecastEl = `
+        <h2>${forecastArray[i].date}</h2>
+        <img src="http://openweathermap.org/img/w/${forecastArray[i].weatherIcon}.png" />
+        <p><strong>High:</strong> ${forecastArray[i].highTemp}°F</p>
+        <p><strong>Low:</strong> ${forecastArray[i].lowTemp}°F</p>
+        <p><strong>Humidity:</strong> ${forecastArray[i].humidity}%</p>
+        `;
+
+        const parentEl = $("#next-date-" + (i + 1));
+        parentEl.append(forecastEl);
+      }
     })
     .catch(function (err) {
       alert(`Unable to connect to OpenWeather API: ${err}`);
