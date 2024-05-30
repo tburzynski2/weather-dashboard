@@ -9,3 +9,11 @@
 .five-day-result {
   background-color: aquamarine;
 }
+
+.search-history {
+  cursor: pointer;
+}
+
+.selected-history {
+  background-color: #999999;
+}

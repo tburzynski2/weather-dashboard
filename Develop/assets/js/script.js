@@ -32,6 +32,15 @@ function renderSearches(searches) {
   }
 }
 
+// Listen for clicks on the search history <p> elements
+searchDivEl.on("click", "p", function () {
+  searchDivEl.find("p").removeClass("selected-history");
+  $(this).addClass("selected-history");
+  const cityName = $(this).text();
+  getDailyForecast(cityName);
+  getFiveDayForecast(cityName);
+});
+
 // Get city lat and lon attributes from OpenWeather API
 function getCityCoordinates(cityName) {
   const endpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${key}`;
