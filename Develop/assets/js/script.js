@@ -92,7 +92,6 @@ function getFiveDayForecast(cityName) {
   return getCityCoordinates(cityName)
     .then((coordinates) => {
       const endpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${key}&units=imperial`;
-      console.log(endpoint);
       return fetch(endpoint);
     })
     .then((response) => {
@@ -163,7 +162,6 @@ function processFiveDayForecast(forecastData) {
       }
     }
   });
-  console.log(fiveDayForecastArray);
   return fiveDayForecastArray;
 }
 
